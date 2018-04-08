@@ -1,21 +1,16 @@
 ﻿using Bannerflow.Api.Models;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System;
 
 namespace Bannerflow.Api.Data
 {
-    public class DbContext
+    public class MongoDbContext : IMongoDbContext
     {
         private readonly IMongoDatabase _database;
 
-        public DbContext(IOptions<DbSettings> settings)
+        public MongoDbContext(IMongoDatabase database)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
-            if (client != null)
-            {
-                _database = client.GetDatabase(settings.Value.Database);
-            }
-               
+            _database = database ?? throw new ArgumentNullException(nameof(database));
         }
 
         public IMongoCollection<Banner> Banners
@@ -26,4 +21,5 @@ namespace Bannerflow.Api.Data
             }
         }
     }
+
 }

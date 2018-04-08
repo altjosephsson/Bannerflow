@@ -20,12 +20,7 @@ namespace Bannerflow.Api.Models
         {
             Message = message;
         }
-
-        /// <summary>
-        /// Creates a new <see cref="ApiError"/> from the result of a model binding attempt.
-        /// The first model binding error (if any) is placed in the <see cref="Detail"/> property.
-        /// </summary>
-        /// <param name="modelState"></param>
+        
         public ApiError(ModelStateDictionary modelState)
         {
             Message = ModelBindingErrorMessage;
