@@ -114,13 +114,13 @@ namespace Bannerflow.Api.Controllers
                 };                          
 
                 var resultBanner =  await _bannerRepository.AddAsync(banner);
-
-                //Get url location from another source
-                Request.HttpContext.Response.Headers.Add("Location", $"http://localhost:50211/api/v1/banner/{banner.Id}");
-
+                
                 _logger.LogInformation(_eventId, $"Succesfully created resource id: {resultBanner.Id}");
 
                 var bannerDto = _mapper.Map<Banner, BannerDto>(resultBanner);
+
+                //Get url location from another source
+                Request.HttpContext.Response.Headers.Add("Location", $"http://localhost:50211/api/v1/banners/{bannerDto.Id}");
 
                 return Ok(bannerDto);
             }
@@ -139,19 +139,19 @@ namespace Bannerflow.Api.Controllers
         {
             try
             {
-                var banner = await _bannerRepository.GetAsync(id);
-                if (banner == null)
-                {
-                    return NotFound();
-                }
-
                 var doc = new HtmlDocument();
                 doc.LoadHtml(bannerUpdateDto.Html);
 
                 if (doc.ParseErrors.Any())
                 {
                     return BadRequest(doc.ParseErrors);
-                }              
+                }
+
+                var banner = await _bannerRepository.GetAsync(id);
+                if (banner == null)
+                {
+                    return NotFound();
+                }            
 
                 banner.Html = bannerUpdateDto.Html;
                 banner.Modified = DateTime.UtcNow;
@@ -164,11 +164,13 @@ namespace Bannerflow.Api.Controllers
                 }
 
                 //Get url location from another source
-                Request.HttpContext.Response.Headers.Add("Location", $"http://localhost:50211/api/v1/banner/{banner.Id}");
+                Request.HttpContext.Response.Headers.Add("Location", $"http://localhost:50211/api/v1/banners/{banner.Id}");
+
+                var bannerDto = _mapper.Map<Banner, BannerDto>(banner);
 
                 _logger.LogInformation(_eventId, $"Succesfully updated resource id: {banner.Id}");
 
-                return Ok(banner);
+                return Ok(bannerDto);
             }
             catch (Exception e)
             {
@@ -221,7 +223,7 @@ namespace Bannerflow.Api.Controllers
                     Request.HttpContext.Response.StatusCode = 404;
                     return string.Empty;
                 }
-
+                Request.HttpContext.Response.StatusCode = 200;
                 return banner.Html;
             }
             catch (Exception e)
