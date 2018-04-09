@@ -4,6 +4,7 @@ using Bannerflow.Api.Controllers;
 using Bannerflow.Api.Data;
 using Bannerflow.Api.Infrastructure;
 using Bannerflow.Api.Models;
+using Bannerflow.Api.Services;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

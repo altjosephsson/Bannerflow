@@ -2,8 +2,10 @@
 using System;
 using System.Linq;
 
-namespace Bannerflow.Api.Infrastructure
+namespace Bannerflow.Api.Services
 {
+   
+
     public class Transformer : ITransformer
     {
         public BannerDto Transform(Banner banner, string[] fields)

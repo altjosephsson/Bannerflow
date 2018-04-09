@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Bannerflow.Api.Data;
+using Bannerflow.Api.Extensions;
 using Bannerflow.Api.Infrastructure;
 using Bannerflow.Api.Models;
+using Bannerflow.Api.Services;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -85,7 +87,9 @@ namespace Bannerflow.Api.Controllers
                 return Ok(bannerDto);
             }
 
-            //would be interesting to see another solution than this
+            //alternativeSolution
+            var bannerExtension = banner.KeepProperties(fields);
+           
             bannerDto = _transformer.Transform(banner, fields);                 
 
             return Ok(bannerDto);
